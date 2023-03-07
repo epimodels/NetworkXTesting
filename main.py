@@ -15,7 +15,6 @@ def populate(g, popList):
 
 # Returns a graph from a graph of empty nodes
 def auto_populate(g):
-
     # generate list of popNodes
     popList = []
     for i in g:
@@ -28,30 +27,32 @@ def auto_populate(g):
     return newGraph
 
 
-def simulate(graph, ticks, spt):
-    success = 0
+# for each node, there is a chance of the population migrating
+def simulate(g1, ticks, weight):
     for i in range(ticks):
-        if random.random() <= 0.5:
-            success += 1
-    print(success)
+        for node in g1:
+            for neighbor in iter(g1[node]):
+                if random.random() <= weight:
+                    neighbor.pop1 += 1
+                    node.pop1 -= 1
+                if random.random() <= weight:
+                    neighbor.pop2 += 1
+                    node.pop2 -= 1
+    return g1
 
 
 # Function used to display a graph of PopNodes graphically, with each PopNode shown as a tuple
 def display(g1):
-
+    # make a list with a tuple for each node in g1
     tupleList = []
     for i in g1.nodes():
         tupleList.append((i.pop1, i.pop2))
 
+    # draw a graph with the PopNodes replaced with tuples
     mapping = dict(zip(g1.nodes, tupleList))
     g2 = nx.relabel_nodes(g1, mapping)
     nx.draw(g2, with_labels=True, font_weight='bold')
     plt.show()
-
-
-# for each node, there is a chance of the population migrating
-def update(graph, probability):
-    pass
 
 
 # Stores two populations (each population stores an integer)
@@ -63,4 +64,4 @@ class PopNode:
 
 if __name__ == '__main__':
     g = auto_populate(nx.petersen_graph())
-    display(g)
+    simulate(g, 15, 0.5)
