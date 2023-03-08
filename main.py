@@ -41,7 +41,7 @@ def simulate(g1, ticks, weight):
     return g1
 
 
-# Function used to display a graph of PopNodes graphically, with each PopNode shown as a tuple
+# Displays a graph of PopNodes graphically, with each PopNode shown as a tuple
 def display(g1):
     # make a list with a tuple for each node in g1
     tupleList = []
@@ -63,5 +63,9 @@ class PopNode:
 
 
 if __name__ == '__main__':
-    g = auto_populate(nx.petersen_graph())
-    simulate(g, 15, 0.5)
+    populationList = [PopNode(1, 2), PopNode(3, 4), PopNode(5, 6), PopNode(7, 8), PopNode(9, 10),
+                      PopNode(11, 12), PopNode(13, 14), PopNode(15, 16), PopNode(17, 18), PopNode(19, 20)]
+
+    g = populate(nx.petersen_graph(), populationList)
+
+    display(g)
