@@ -66,6 +66,8 @@ if __name__ == '__main__':
     populationList = [PopNode(1, 2), PopNode(3, 4), PopNode(5, 6), PopNode(7, 8), PopNode(9, 10),
                       PopNode(11, 12), PopNode(13, 14), PopNode(15, 16), PopNode(17, 18), PopNode(19, 20)]
 
-    g = populate(nx.petersen_graph(), populationList)
+    g1 = populate(nx.petersen_graph(), populationList)
 
-    display(g)
+    g2 = auto_populate(nx.petersen_graph())
+
+
