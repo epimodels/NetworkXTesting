@@ -2,6 +2,7 @@ import networkx as nx
 import random
 import matplotlib.pyplot as plt
 
+
 # Stores two populations (each population stores an integer)
 class PopNode:
     def __init__(self, pop1, pop2):
@@ -10,9 +11,16 @@ class PopNode:
 
 
 class PopGraph(nx.Graph):
-    # def __init__(self):
-    #    super().__init__()
 
+    # overrides the __init__ method from nx.Graph
+    # if a graph is passed for G, then the nodes and edges of G will be added to self
+    def __init__(self, G=None):
+        super().__init__()
+        if G is not None:
+            self.add_nodes_from(G.nodes())
+            self.add_edges_from(G.edges())
+
+    # simple function to cleanly add new population objects
     def add_pop(self, pop1, pop2):
         self.add_node(PopNode(pop1, pop2))
 

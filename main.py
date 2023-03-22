@@ -1,9 +1,12 @@
-import PopGraph
+import networkx as nx
+
+import PopGraph as pg
 
 
 if __name__ == '__main__':
 
-    G = PopGraph.PopGraph()
+    G = pg.PopGraph(nx.petersen_graph())
 
-    G.auto_populate()
+    G = G.auto_populate()
+
     G.display()
