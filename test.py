@@ -12,5 +12,8 @@ class PopGraphTest(unittest.TestCase):
                           PopNode(11, 12), PopNode(13, 14), PopNode(15, 16), PopNode(17, 18), PopNode(19, 20)]
 
         g1 = populate(nx.petersen_graph(), populationList)
-        g2 = simulate(g1, 1, 1)
+        display(g1)
+        g2 = simulate(g1, 1, 0.5)
+        display(g2)
         self.assertTrue(nx.is_isomorphic(g1, g2))
+        print(compare(g1, g2))

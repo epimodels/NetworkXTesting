@@ -1,7 +1,8 @@
 import networkx as nx
-import time
 import random
 import matplotlib.pyplot as plt
+
+import PopGraph
 
 
 # Returns a graph from a graph of empty nodes, and a list of PopNodes
@@ -54,6 +55,23 @@ def display(g1):
     nx.draw(g2, with_labels=True, font_weight='bold')
     plt.show()
 
+# finds the greatest difference in population between graphs
+def compare(g1, g2):
+    lst1 = list(g1.nodes)
+    lst2 = list(g2.nodes)
+
+    popDif = 0
+
+    for i in range(len(lst1)):
+        temp1 = abs(lst1[i].pop1 - lst2[i].pop1)
+        temp2 = abs(lst1[i].pop2 - lst2[i].pop2)
+        if temp1 > popDif:
+            popDif = temp1
+        if temp2 > popDif:
+            popDif = temp2
+
+    return popDif
+
 
 # Stores two populations (each population stores an integer)
 class PopNode:
@@ -63,11 +81,7 @@ class PopNode:
 
 
 if __name__ == '__main__':
-    populationList = [PopNode(1, 2), PopNode(3, 4), PopNode(5, 6), PopNode(7, 8), PopNode(9, 10),
-                      PopNode(11, 12), PopNode(13, 14), PopNode(15, 16), PopNode(17, 18), PopNode(19, 20)]
 
-    g1 = populate(nx.petersen_graph(), populationList)
+    G = PopGraph.PopGraph()
 
-    g2 = auto_populate(nx.petersen_graph())
-
-
+    display(auto_populate(G))
