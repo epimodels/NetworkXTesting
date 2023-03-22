@@ -2,7 +2,7 @@ import networkx as nx
 import random
 import matplotlib.pyplot as plt
 
-
+# Stores two populations (each population stores an integer)
 class PopNode:
     def __init__(self, pop1, pop2):
         self.pop1 = pop1
@@ -36,3 +36,29 @@ class PopGraph(nx.Graph):
         mapping = dict(zip(nodeList, popList))  # creates a dictionary of empty nodes and population objects
         newGraph = nx.relabel_nodes(self, mapping, True)  # copies the population objects to the original graph
         return newGraph
+
+    # for each node, there is a chance of the population migrating
+    def simulate(self, ticks, weight):
+        for i in range(ticks):
+            for node in self:
+                for neighbor in iter(self[node]):
+                    if random.random() <= weight:
+                        neighbor.pop1 += 1
+                        node.pop1 -= 1
+                    if random.random() <= weight:
+                        neighbor.pop2 += 1
+                        node.pop2 -= 1
+        return self
+
+    # Displays a graph of PopNodes graphically, with each PopNode shown as a tuple
+    def display(self):
+        # make a list with a tuple for each node in g1
+        tupleList = []
+        for i in self.nodes():
+            tupleList.append((i.pop1, i.pop2))
+
+        # draw a graph with the PopNodes replaced with tuples
+        mapping = dict(zip(self.nodes, tupleList))
+        g2 = nx.relabel_nodes(self, mapping)
+        nx.draw(g2, with_labels=True, font_weight='bold')
+        plt.show()

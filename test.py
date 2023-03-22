@@ -1,15 +1,35 @@
 import unittest
 import networkx as nx
 import networkx.algorithms.isomorphism as iso
-
+import PopGraph as pg
 from main import *
+
+
+# finds the greatest difference in population between graphs
+def compare(g1, g2):
+    lst1 = list(g1.nodes)
+    lst2 = list(g2.nodes)
+
+    popDif = 0
+
+    for i in range(len(lst1)):
+        temp1 = abs(lst1[i].pop1 - lst2[i].pop1)
+        temp2 = abs(lst1[i].pop2 - lst2[i].pop2)
+        if temp1 > popDif:
+            popDif = temp1
+        if temp2 > popDif:
+            popDif = temp2
+
+    return popDif
 
 
 class PopGraphTest(unittest.TestCase):
 
+
+
     def test_simulate(self):
-        populationList = [PopNode(1, 2), PopNode(3, 4), PopNode(5, 6), PopNode(7, 8), PopNode(9, 10),
-                          PopNode(11, 12), PopNode(13, 14), PopNode(15, 16), PopNode(17, 18), PopNode(19, 20)]
+        populationList = [pg.PopNode(1, 2), pg.PopNode(3, 4), pg.PopNode(5, 6), pg.PopNode(7, 8), pg.PopNode(9, 10),
+                          pg.PopNode(11, 12), pg.PopNode(13, 14), pg.PopNode(15, 16), pg.PopNode(17, 18), pg.PopNode(19, 20)]
 
         g1 = populate(nx.petersen_graph(), populationList)
         display(g1)
