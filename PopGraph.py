@@ -20,9 +20,36 @@ class PopGraph(nx.Graph):
             self.add_nodes_from(G.nodes())
             self.add_edges_from(G.edges())
 
-    # simple function to cleanly add new population objects
+    # simple method to cleanly add new population objects
     def add_pop(self, pop1, pop2):
         self.add_node(PopNode(pop1, pop2))
+
+    # simple method to add a list of populations passed as an array of tuples
+    def add_pops_from(self, popArray):
+        for pop in popArray:
+            self.add_pop(pop[0], pop[1])
+
+    # simple method to find a popNode object that matches the given tuple population
+    def find(self, popTuple):
+        for node in self.nodes:
+            if (popTuple[0] == node.pop1) and (popTuple[1] == node.pop2):
+                return node
+        return None
+
+    # method that creates edges based on passed array
+    # eg: [((44, 13), (36, 46), (68, 92), (88, 19)),
+    #      ((36, 46), (44, 13), (65, 93)) (39, 25)),
+    #      ((39, 25), (36, 46), (67, 25), (0, 34)),
+    #      ((0, 34), (39, 25), (67, 25), (36, 46)),
+    #      ((65, 93), (82, 68), (52, 77), (36, 46)),
+    #      ((82, 68), (67, 25), (68, 92), (65, 93)),
+    #      ((68, 92), (82, 68), (44, 13), (0, 34)),
+    #      ((52, 77), (88, 19), (65, 93), (0, 34)),
+    #      ((67, 25), (82, 68), (88, 19), (39, 25)),
+    #      ((88, 19), (44, 13), (52, 77), (67, 25))
+    #      ]
+    def add_pop_edges_from(self, popEdgeArray):
+        pass
 
     # Returns a graph from a graph of empty nodes, and a list of PopNodes
     # Uses relabel_nodes function:
@@ -57,6 +84,12 @@ class PopGraph(nx.Graph):
                         neighbor.pop2 += 1
                         node.pop2 -= 1
         return self
+
+    def single_step(self):
+        for node in self:
+            for neighbor in iter(self[node]):
+                print("(" + str(neighbor.pop1) + ", " + str(neighbor.pop2) + ")")
+            print("node: " + "(" + str(node.pop1) + ", " + str(node.pop2) + ") \n neighbors: \n")
 
     # Displays a graph of PopNodes graphically, with each PopNode shown as a tuple
     def display(self):
