@@ -37,19 +37,20 @@ class PopGraph(nx.Graph):
         return None
 
     # method that creates edges based on passed array
-    # eg: [((44, 13), (36, 46), (68, 92), (88, 19)),
-    #      ((36, 46), (44, 13), (65, 93)) (39, 25)),
-    #      ((39, 25), (36, 46), (67, 25), (0, 34)),
-    #      ((0, 34), (39, 25), (67, 25), (36, 46)),
-    #      ((65, 93), (82, 68), (52, 77), (36, 46)),
-    #      ((82, 68), (67, 25), (68, 92), (65, 93)),
-    #      ((68, 92), (82, 68), (44, 13), (0, 34)),
-    #      ((52, 77), (88, 19), (65, 93), (0, 34)),
-    #      ((67, 25), (82, 68), (88, 19), (39, 25)),
-    #      ((88, 19), (44, 13), (52, 77), (67, 25))
-    #      ]
+    # edgeArray = [((44, 13), (36, 46), (68, 92), (88, 19)), ((36, 46), (44, 13), (65, 93), (39, 25)),
+    #             ((39, 25), (36, 46), (67, 25), (0, 34)), ((0, 34), (39, 25), (68, 92), (52, 77)),
+    #             ((65, 93), (82, 68), (52, 77), (36, 46)), ((82, 68), (67, 25), (68, 92), (65, 93)),
+    #             ((68, 92), (82, 68), (44, 13), (0, 34)), ((52, 77), (88, 19), (65, 93), (0, 34)),
+    #             ((67, 25), (82, 68), (88, 19), (39, 25)), ((88, 19), (44, 13), (52, 77), (67, 25))]
+    # for each tuple in the array, will add an edge between each first node and the following nodes in the tuple.
+    # will not add self loops or duplicate edges
     def add_pop_edges_from(self, popEdgeArray):
-        pass
+        for tupleTuple in popEdgeArray:
+            nodeInstance1 = self.find(tupleTuple[0])
+            for popTuple in tupleTuple:
+                nodeInstance2 = self.find(popTuple)
+                if (nodeInstance1 != nodeInstance2) and not (self.has_edge(nodeInstance1, nodeInstance2)):
+                    self.add_edge(nodeInstance1, nodeInstance2)
 
     # Returns a graph from a graph of empty nodes, and a list of PopNodes
     # Uses relabel_nodes function:

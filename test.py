@@ -5,9 +5,8 @@ import networkx.algorithms.isomorphism as iso
 from main import *
 
 
-def setup(self):
-    exGraph = pg.PopGraph()
-    exGraph.add_pop(44, 13)
+def setUp(self):
+    pass
 
 
 # finds the greatest difference in population between graphs
@@ -40,6 +39,21 @@ class TestPopGraph(unittest.TestCase):
         for node in G2.nodes:
             self.assertTrue(isinstance(node, pg.PopNode))
             self.assertTrue(isinstance(node.pop1, int) and isinstance(node.pop2, int))
+
+    def test_example_graph(self):
+        exGraph = pg.PopGraph()
+        exGraph.add_pops_from(
+            [(44, 13), (36, 46), (39, 25), (0, 34), (65, 93), (82, 68), (68, 92), (52, 77), (67, 25), (88, 19)]
+        )
+
+        edgeArray = [((44, 13), (36, 46), (68, 92), (88, 19)), ((36, 46), (44, 13), (65, 93), (39, 25)),
+                     ((39, 25), (36, 46), (67, 25), (0, 34)), ((0, 34), (39, 25), (68, 92), (52, 77)),
+                     ((65, 93), (82, 68), (52, 77), (36, 46)), ((82, 68), (67, 25), (68, 92), (65, 93)),
+                     ((68, 92), (82, 68), (44, 13), (0, 34)), ((52, 77), (88, 19), (65, 93), (0, 34)),
+                     ((67, 25), (82, 68), (88, 19), (39, 25)), ((88, 19), (44, 13), (52, 77), (67, 25))]
+
+        exGraph.add_pop_edges_from(edgeArray)
+        exGraph.display()
 
     """def test_simulate(self):
     populationList = [pg.PopNode(1, 2), pg.PopNode(3, 4), pg.PopNode(5, 6), pg.PopNode(7, 8), pg.PopNode(9, 10),
