@@ -10,21 +10,21 @@ def setUp(self):
 
 
 # finds the greatest difference in population between graphs
-def compare(g1, g2):
+def difference(g1, g2):
     lst1 = list(g1.nodes)
     lst2 = list(g2.nodes)
 
-    popDif = 0
+    max_dif = 0
 
     for i in range(len(lst1)):
-        temp1 = abs(lst1[i].pop1 - lst2[i].pop1)
-        temp2 = abs(lst1[i].pop2 - lst2[i].pop2)
-        if temp1 > popDif:
-            popDif = temp1
-        if temp2 > popDif:
-            popDif = temp2
+        dif1 = abs(lst1[i].pop1 - lst2[i].pop1)
+        dif2 = abs(lst1[i].pop2 - lst2[i].pop2)
+        if dif1 > max_dif:
+            max_dif = dif1
+        if dif2 > max_dif:
+            max_dif = dif2
 
-    return popDif
+    return max_dif
 
 
 class TestPopGraph(unittest.TestCase):

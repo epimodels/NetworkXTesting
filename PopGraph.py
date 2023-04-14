@@ -74,14 +74,14 @@ class PopGraph(nx.Graph):
         return newGraph
 
     # for each node, there is a chance of the population migrating
-    def simulate(self, ticks, weight):
-        for i in range(ticks):
+    def simulate(self, steps, weight):
+        for i in range(steps):
             for node in self:
                 for neighbor in iter(self[node]):
-                    if random.random() <= weight:
+                    if random.random() <= weight and node.pop1 > 0:
                         neighbor.pop1 += 1
                         node.pop1 -= 1
-                    if random.random() <= weight:
+                    if random.random() <= weight and node.pop2 > 0:
                         neighbor.pop2 += 1
                         node.pop2 -= 1
         return self
@@ -89,8 +89,12 @@ class PopGraph(nx.Graph):
     def single_step(self):
         for node in self:
             for neighbor in iter(self[node]):
-                print("(" + str(neighbor.pop1) + ", " + str(neighbor.pop2) + ")")
-            print("node: " + "(" + str(node.pop1) + ", " + str(node.pop2) + ") \n neighbors: \n")
+                if random.random() <= 0.5 and node.pop1 > 0:
+                    neighbor.pop1 += 1
+                    node.pop1 -= 1
+                if random.random() <= 0.5 and node.pop2 > 0:
+                    neighbor.pop2 += 1
+                    node.pop2 -= 1
 
     # Displays a graph of PopNodes graphically, with each PopNode shown as a tuple
     def display(self):
