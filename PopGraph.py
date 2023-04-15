@@ -24,7 +24,7 @@ class PopGraph(nx.Graph):
     def add_pop(self, pop1, pop2):
         self.add_node(PopNode(pop1, pop2))
 
-    # simple method to add a list of populations passed as an array of tuples
+    # simple method to add a list of PopNodes passed as an array of tuples
     def add_pops_from(self, popArray):
         for pop in popArray:
             self.add_pop(pop[0], pop[1])
@@ -61,11 +61,11 @@ class PopGraph(nx.Graph):
         return newGraph
 
     # Returns a graph from a graph of empty nodes
-    def auto_populate(self):
+    def auto_populate(self, lower=0, upper=99):
         # generate list of popNodes
         popList = []
         for i in self:
-            popNode = PopNode(random.randrange(0, 99), random.randrange(0, 99))
+            popNode = PopNode(random.randrange(lower, upper), random.randrange(lower, upper))
             popList.append(popNode)
 
         nodeList = self.nodes  # gets a list of the node of the graph to be written over
@@ -84,17 +84,6 @@ class PopGraph(nx.Graph):
                     if random.random() <= weight and node.pop2 > 0:
                         neighbor.pop2 += 1
                         node.pop2 -= 1
-        return self
-
-    def single_step(self):
-        for node in self:
-            for neighbor in iter(self[node]):
-                if random.random() <= 0.5 and node.pop1 > 0:
-                    neighbor.pop1 += 1
-                    node.pop1 -= 1
-                if random.random() <= 0.5 and node.pop2 > 0:
-                    neighbor.pop2 += 1
-                    node.pop2 -= 1
 
     # Displays a graph of PopNodes graphically, with each PopNode shown as a tuple
     def display(self):

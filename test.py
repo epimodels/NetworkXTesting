@@ -1,6 +1,7 @@
 import unittest
 import networkx as nx
 import networkx.algorithms.isomorphism as iso
+import PopGraph as pg
 
 from main import *
 
