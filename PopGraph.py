@@ -74,7 +74,7 @@ class PopGraph(nx.Graph):
         return newGraph
 
     # for each node, there is a chance of the population migrating
-    def simulate(self, steps, weight):
+    def simulate(self, steps=1, weight=1):
         for i in range(steps):
             for node in self:
                 for neighbor in iter(self[node]):

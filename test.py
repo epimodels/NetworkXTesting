@@ -56,18 +56,6 @@ class TestPopGraph(unittest.TestCase):
         exGraph.add_pop_edges_from(edgeArray)
         exGraph.display()
 
-    """def test_simulate(self):
-    populationList = [pg.PopNode(1, 2), pg.PopNode(3, 4), pg.PopNode(5, 6), pg.PopNode(7, 8), pg.PopNode(9, 10),
-                      pg.PopNode(11, 12), pg.PopNode(13, 14), pg.PopNode(15, 16), pg.PopNode(17, 18), pg.PopNode(19, 20)]
-
-    g1 = populate(nx.petersen_graph(), populationList)
-    display(g1)
-    g2 = simulate(g1, 1, 0.5)
-    display(g2)
-    self.assertTrue(nx.is_isomorphic(g1, g2))
-    print(compare(g1, g2))
-    """
-
 
 if __name__ == '__main__':
     unittest.main()

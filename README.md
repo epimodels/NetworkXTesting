@@ -137,3 +137,25 @@ edgeArray = [
 G.add_pop_edges_from(edgeArray)
 G.display()
 ```
+
+### Simulating Population Change
+
+We can simulate changes in the population using the simulate() method. The method takes in the number of steps to run,
+and the weight (0 to 1) for a population to migrate. Both parameters default to 1. Note that even with a weight of 1,
+which guarantees that a population will migrate when a node is visited, doesn't guarantee that populations won't
+migrate back. So some nodes may have the same population values even if migration is guaranteed.
+
+We can do a simple simulation that displays the graph before and after as follows:
+
+```py
+import PopGraph as px
+import networkx as nx
+G = px.PopGraph(nx.petersen_graph())
+G = G.auto_populate()
+G.display()
+G.simulate(3, 0.5)
+G.display()
+```
+
+This will create a peterson graph with pop values between 0 and 99. It will then run 3 simulation steps on the graph,
+with there being a 50% chance of population migration whenever a node is visited.
