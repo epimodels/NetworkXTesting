@@ -2,27 +2,29 @@ import networkx as nx
 import random
 import matplotlib.pyplot as plt
 
-
 # Stores two populations (each population stores an integer)
 class PopNode:
     def __init__(self, pop1, pop2):
         self.pop1 = pop1
         self.pop2 = pop2
 
-
+# overrides the __init__ method from nx.Graph
+# if a graph is passed for G, then the nodes and edges of G will be added to self
 class PopGraph(nx.Graph):
 
-    # overrides the __init__ method from nx.Graph
-    # if a graph is passed for G, then the nodes and edges of G will be added to self
     def __init__(self, G=None):
         super().__init__()
+        self.node_dict = {}
         if G is not None:
             self.add_nodes_from(G.nodes())
             self.add_edges_from(G.edges())
+            self.node_dict = {node: node for node in G.nodes()}
 
     # simple method to cleanly add new population objects
     def add_pop(self, pop1, pop2):
-        self.add_node(PopNode(pop1, pop2))
+        node = PopNode(pop1, pop2)
+        self.add_node(node)
+        self.node_dict[(pop1, pop2)] = node
 
     # simple method to add a list of PopNodes passed as an array of tuples
     def add_pops_from(self, popArray):
@@ -31,10 +33,7 @@ class PopGraph(nx.Graph):
 
     # simple method to find a popNode object that matches the given tuple population
     def find(self, popTuple):
-        for node in self.nodes:
-            if (popTuple[0] == node.pop1) and (popTuple[1] == node.pop2):
-                return node
-        return None
+        return self.node_dict.get(popTuple, None)
 
     # method that creates edges based on passed array
     # edgeArray = [((44, 13), (36, 46), (68, 92), (88, 19)), ((36, 46), (44, 13), (65, 93), (39, 25)),
@@ -47,35 +46,32 @@ class PopGraph(nx.Graph):
     def add_pop_edges_from(self, popEdgeArray):
         for tupleTuple in popEdgeArray:
             nodeInstance1 = self.find(tupleTuple[0])
-            for popTuple in tupleTuple:
+            if not nodeInstance1:
+                continue
+            for popTuple in tupleTuple[1:]:
                 nodeInstance2 = self.find(popTuple)
-                if (nodeInstance1 != nodeInstance2) and not (self.has_edge(nodeInstance1, nodeInstance2)):
+                if nodeInstance2 and nodeInstance1 != nodeInstance2 and not self.has_edge(nodeInstance1, nodeInstance2):
                     self.add_edge(nodeInstance1, nodeInstance2)
 
     # Returns a graph from a graph of empty nodes, and a list of PopNodes
     # Uses relabel_nodes function:
     def populate(self, popList):
-        nodeList = self.nodes  # gets a list of the nodes of the graph to be written over
-        mapping = dict(zip(nodeList, popList))  # creates a dictionary of empty nodes and population objects
-        newGraph = nx.relabel_nodes(self, mapping, True)  # copies the population objects to the original graph
+        nodeList = self.nodes # gets a list of the nodes of the graph to be written over
+        mapping = dict(zip(nodeList, popList)) # creates a dictionary of empty nodes and population objects
+        newGraph = nx.relabel_nodes(self, mapping, True) # copies the population objects to the original graph
         return newGraph
 
     # Returns a graph from a graph of empty nodes
     def auto_populate(self, lower=0, upper=99):
         # generate list of popNodes
-        popList = []
-        for i in self:
-            popNode = PopNode(random.randrange(lower, upper), random.randrange(lower, upper))
-            popList.append(popNode)
-
-        nodeList = self.nodes  # gets a list of the node of the graph to be written over
-        mapping = dict(zip(nodeList, popList))  # creates a dictionary of empty nodes and population objects
-        newGraph = nx.relabel_nodes(self, mapping, True)  # copies the population objects to the original graph
+        popList = [PopNode(random.randrange(lower, upper), random.randrange(lower, upper)) for _ in self] # gets a list of the node of the graph to be written over
+        mapping = dict(zip(self.nodes, popList)) # creates a dictionary of empty nodes and population objects
+        newGraph = nx.relabel_nodes(self, mapping, True) # copies the population objects to the original graph
         return newGraph
 
     # for each node, there is a chance of the population migrating
     def simulate(self, steps=1, weight=1):
-        for i in range(steps):
+        for _ in range(steps):
             for node in self:
                 for neighbor in iter(self[node]):
                     if random.random() <= weight and node.pop1 > 0:
@@ -85,14 +81,8 @@ class PopGraph(nx.Graph):
                         neighbor.pop2 += 1
                         node.pop2 -= 1
 
-    # Displays a graph of PopNodes graphically, with each PopNode shown as a tuple
     def display(self):
-        # make a list with a tuple for each node in g1
-        tupleList = []
-        for i in self.nodes():
-            tupleList.append((i.pop1, i.pop2))
-
-        # draw a graph with the PopNodes replaced with tuples
+        tupleList = [(node.pop1, node.pop2) for node in self.nodes]
         mapping = dict(zip(self.nodes, tupleList))
         g2 = nx.relabel_nodes(self, mapping)
         nx.draw(g2, with_labels=True, font_weight='bold')
